@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import  ValidationComponent from './Validators/ValidationComponent';
 import CharComponent from './Validators/CharComponent';
-const chars = [];
+
 let inputtxt = '';
 class App extends Component {
 state ={
@@ -13,39 +13,48 @@ state ={
 
 inputHandler = (e) =>{
   inputtxt = e.target.value;
+  const chars = [...this.state.charsArry];
   const p = {
-    id: inputtxt.length -1,
+    id: (inputtxt.length -1),
     char : inputtxt[inputtxt.length -1]
   };
   
   if(inputtxt.length > this.state.charsArry.length){
-   
     chars.push(p);
-    
-    
   }
   else{
-    chars.splice(this.state.charsArry[p.id-1],1);
-   
+     chars.splice(0,chars.length);
+    for (let i = 0; i < inputtxt.length-1; i++) {
+      chars[i] = {
+        id : i,
+        char: inputtxt[i]
+      } 
+     chars.push(p); 
+    }
   }
   this.setState({
     input : inputtxt,
     inputLength : inputtxt.length,
     charsArry : chars
   })
-  console.log(this.state.charsArry)
+  
 }
 
 deleteCharHandler = (charIndex) =>{
+  let res = '';
+  document.getElementById('in').value = inputtxt.slice(charIndex,1);
   const chars = [...this.state.charsArry];
-  //document.getElementById('in').value = inputtxt;
+  
   chars.splice(charIndex,1);
   this.setState({
     input : inputtxt,
     inputLength : inputtxt.length,
     charsArry: chars
   });
-  
+  for (let i = 0; i < chars.length; i++) {
+    res += chars[i].char;
+  }
+  document.getElementById('in').value = res;
   }
 
   render() {
@@ -69,16 +78,6 @@ deleteCharHandler = (charIndex) =>{
       <p>{this.state.inputLength}</p>
       <ValidationComponent>{this.state.inputLength >= 5 ? 'Long enough' : "Too short" }</ValidationComponent>
       {chars}
-      {console.log(this.state)}
-        <ol>
-          <li>Create an input field (in App component) with a change listener which outputs the length of the entered text below it (e.g. in a paragraph). <strong> V</strong></li>
-          <li>Create a new component (=> ValidationComponent) which receives the text length as a prop<strong> V</strong></li>
-          <li>Inside the ValidationComponent, either output "Text too short" or "Text long enough" depending on the text length (e.g. take 5 as a minimum length)<strong> V</strong></li>
-          <li>Create another component (=> CharComponent) and style it as an inline box (=> display: inline-block, padding: 16px, text-align: center, margin: 16px, border: 1px solid black).</li>
-          <li>Render a list of CharComponents where each CharComponent receives a different letter of the entered text (in the initial input field) as a prop.</li>
-          <li>When you click a CharComponent, it should be removed from the entered text.</li>
-        </ol>
-        <p>Hint: Keep in mind that JavaScript strings are basically arrays!</p>
       </div>
     );
   }
