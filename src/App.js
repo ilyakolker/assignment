@@ -44,17 +44,16 @@ deleteCharHandler = (charIndex) =>{
   let res = '';
   document.getElementById('in').value = inputtxt.slice(charIndex,1);
   const chars = [...this.state.charsArry];
-  
   chars.splice(charIndex,1);
-  this.setState({
-    input : inputtxt,
-    inputLength : inputtxt.length,
-    charsArry: chars
-  });
   for (let i = 0; i < chars.length; i++) {
     res += chars[i].char;
   }
   document.getElementById('in').value = res;
+  this.setState({
+    input : res,
+    inputLength : res.length,
+    charsArry: chars
+  });
   }
 
   render() {
@@ -75,7 +74,7 @@ deleteCharHandler = (charIndex) =>{
     return (
       <div className="App">
       <input id="in" type='text' onChange={(event) => this.inputHandler(event)} />
-      <p>{this.state.inputLength}</p>
+      <p>{this.state.input}</p>
       <ValidationComponent>{this.state.inputLength >= 5 ? 'Long enough' : "Too short" }</ValidationComponent>
       {chars}
       </div>
